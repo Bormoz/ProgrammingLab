@@ -118,8 +118,7 @@ def compute_avg_monthly_difference(time_series, first_year, last_year):
         media.append(inc_m/(anni-1))
         #dopo aver calcolato l'incremento medio per un mese
         #setto l'incremento a 0 e calcolo per il mese successivo
-        inc_m = 0
-    
+        inc_m = 0 
     return media  
 
 time_series_file = CSVTimeSeriesFile(name='data.csv')
