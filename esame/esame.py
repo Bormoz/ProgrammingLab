@@ -118,7 +118,6 @@ def compute_avg_monthly_difference(time_series, first_year, last_year):
 
     conta = 0
     inc_m = 0
-    
     media = []
 
     for i in range(0,12):
@@ -143,5 +142,3 @@ def compute_avg_monthly_difference(time_series, first_year, last_year):
 
         inc_m = 0 
     return media  
-
-
