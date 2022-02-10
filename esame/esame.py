@@ -145,13 +145,3 @@ def compute_avg_monthly_difference(time_series, first_year, last_year):
     return media  
 
 
-#========================
-# Corpo del programma
-#========================
-
-time_series_file = CSVTimeSeriesFile(name='data.csv')
-time_series = time_series_file.get_data()
-print('nome file: {}'.format(time_series_file.name))
-print('contenuto file: {}'.format(time_series))
-print('')
-print("La media dell'incremento di passeggeri ogni mese è: {} ".format(compute_avg_monthly_difference(time_series,"1949","1951")))
