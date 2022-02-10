@@ -3,6 +3,7 @@
 #===========================
 #Creo la classe ExamException che utilizzerò per poter
 #alzare le eccezioni nel programma
+
 class ExamException(Exception):
     pass
 
@@ -11,15 +12,18 @@ class ExamException(Exception):
 #==========================
 #Creo la classe CSVTimeSeriesFile la quale mi servirà per creare
 #una lista di liste contenente i dati del file data.csv
+
 class CSVTimeSeriesFile():
 
     #si inizializza la classe stabilendo il nome
+
     def __init__(self, name):
         
         self.name = name
 
     #verifico di riuscire ad aprire e leggere il file
-    #in caso contrario impostp can_read falsa e stampo l'errore  
+    #in caso contrario impostp can_read falsa e stampo l'errore 
+
         self.can_read = True
         try:
             my_file = open(self.name, 'r')
@@ -32,13 +36,15 @@ class CSVTimeSeriesFile():
         
         #se can_read è falsa stampo a schermo che il file non è apribile
         #e non stampo nessun risultato
+
         if not self.can_read:
-            print('Errore, file non aperto o illeggibile')
+            print('Il file non è apribile o leggibile')
             return None
         
         #nel caso can_read sia vera continuo con la creazione della lista di 
         #liste. Tramite un ciclo for divido ogni riga del file alla comparsa
         #della virgola per poi aggiungere ogni lista formata alla lista data
+
         else:
             data = []  
 
@@ -56,31 +62,45 @@ class CSVTimeSeriesFile():
 # Funzione per calcolare la media di passeggeri
 #================================================
 #definisco la funzione che calcoli la media dei passeggeri
+
 def compute_avg_monthly_difference(time_series, first_year, last_year):
+    
+    #controllo che i valori di first_year e last_year siano
+    #entrambi di tipo str e posssano essere convertiti a int
+    #in caso contrario alzo un eccezione. Controllo anche se il
+    #valore di first_year e last_year sia presente nella time_series 
 
     if type(first_year) is not str:
-        raise ExamException('First_year non è un valore accettabile dato che il tipo di dato inserito è: {}'.format(type(first_year)))
+        raise ExamException('Il tipo di valore di first_year non può essere accettato. Il tipo è: {} invece di str'.format(type(first_year)))
 
-    if type(last_year) is not str:
-        raise ExamException('Last_year non è un valore computabile. Tipo di dato inserito: {}'.format(type(last_year)))
+    if first_year not in (i[0][:4]for i in time_series):
+        raise ExamException('first_year ha un valore non compreso nella time_series. Il valore è: {}'.format(first_year))
 
     if first_year.isdigit() is False:
-        raise ExamException('First_year non è un valore trasformabile ad intero. Valore inserito: {}'.format(first_year))
+        raise ExamException('First_year non può essere trasformato in intero, per cui non posso proseguire con il programma. Il valore inserito è: {}'.format(first_year))
+
+    if type(last_year) is not str:
+        raise ExamException('Il tipo di valore di last_year non può essere accettato. Il tipo è: {} invece di str'.format(type(last_year)))
+
+    if last_year not in (i[0][:4]for i in time_series):
+        raise ExamException('last_year ha un valore non compreso nella time_series. Il valore è: {}'.format(last_year))
 
     if last_year.isdigit() is False:
-        raise ExamException('Last_year non è un valore trasformabile ad intero. Valore inserito: {}'.format(last_year))
+        raise ExamException('Last_year non può essere trasformato in intero, per cui non posso proseguire con il programma. Il valore inserito è: {}'.format(last_year))
 
     #dichiaro che la lista_dati sia una lista contente tutti i numeri
     #di passeggeri degli anni che prendo in considerazione
     #anni è il numero di anni che vado a considerare
     #n_p_a è una lista di liste contenenti i dati divisi per anno 
-    #che verranno aggiunti in seguito.
+    #che verranno aggiunti in seguito
+
     lista_dati = [int(i[1]) for i in time_series if int(i[0][:4]) >= int(first_year) and int(i[0][:4]) <= int(last_year)]
     anni = int(last_year)-int(first_year)+1
     n_p_a = [[]for i in range(0,anni)] 
 
     #dichiaro una variabile che mi permetta di inserire nella lista
     #n_p_a i numeri dei passeggeri divisi per anno
+
     num_el = 0
     for i in range(0,len(lista_dati)):
         if i != 0 and i % 12 == 0: 
@@ -95,6 +115,7 @@ def compute_avg_monthly_difference(time_series, first_year, last_year):
     #dati e procedo al calcolo della media
     #Altrimenti se tutti i dati sono presenti procedo
     #con la media e agginugo l'elemento alla lista media
+
     conta = 0
     inc_m = 0
     
@@ -116,10 +137,17 @@ def compute_avg_monthly_difference(time_series, first_year, last_year):
                     inc_m = inc_m + n_p_a[j][i] - n_p_a[j-1][i]
           
         media.append(inc_m/(anni-1))
+
         #dopo aver calcolato l'incremento medio per un mese
         #setto l'incremento a 0 e calcolo per il mese successivo
+
         inc_m = 0 
     return media  
+
+
+#========================
+# Corpo del programma
+#========================
 
 time_series_file = CSVTimeSeriesFile(name='data.csv')
 time_series = time_series_file.get_data()
